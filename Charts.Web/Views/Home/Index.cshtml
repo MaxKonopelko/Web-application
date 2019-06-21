@@ -1,7 +1,69 @@
-﻿
+﻿@model List<Charts.DAL.Transaction>
+
 @{
     ViewBag.Title = "Index";
+    var t = Model;
 }
 
 <h2>Index</h2>
-<h2>Index</h2>
+<canvas id="myChart" width="400" height="400"></canvas>
+
+@*<table>
+        @foreach (var b in t)
+        {
+            <tr>
+                <td><p>@b.Id</p></td>
+                <td><p>@b.Price</p></td>
+                <td><p>@b.TimeTransactions</p></td>
+            </tr>
+        }
+    </table>*@
+<script>
+    var model = @Html.Raw(Json.Encode(Model));
+    var price = model.map(elem => elem.Price);
+    var time = model.map(elem => Number(elem.TimeTransactions.replace(/\D/g, '')));
+    console.log('price', price);
+    console.log('time', time);
+    
+    var timeFormat = 'MM/DD/YYYY HH:mm';
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: time,
+            datasets: [{
+                label: "My First Dataset",
+                data: price,
+                fill: false,
+                borderColor: "rgb(75, 192, 192)",
+                //spanGaps: true,
+                lineTension: 0.1
+            }]
+        },
+        options:
+            {
+                title: {
+                    text: 'Chart.js Time Scale'
+                },
+                scales: {
+                    xAxes: [{
+                        type: 'time',  
+                        time: {
+                            format: 'HH:mm',
+                            tooltipFormat: 'HH:mm',
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Date'
+                        }
+                    }],
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Price'
+                        }
+                    }]
+                }
+            }
+    });
+</script>
