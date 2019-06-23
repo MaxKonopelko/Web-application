@@ -1,8 +1,106 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Ajax";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Ajax</h2>
+<canvas id="myChart" width="400" height="400"></canvas>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Currency</th>
+            <th>Price</th>
+            <th>Volume</th>
+            <th>ParticipantBuyId</th>
+            <th>ParticipantSellId</th>
+            <th>Time</th>
+        </tr>
+    </thead>
+    <tbody id="myTable"></tbody>
+</table>
+
+<script>
+    fetch('http://localhost:5952/api/ajax/test')
+        .then(response => response.json())
+        .then(myJson => {
+            charts(myJson);
+            tableGeneration(myJson);
+        })
+
+    function charts(model) {
+        var price = model.map(elem => elem.Price);
+        var time = model.map(elem => elem.TimeTransactions);
+
+        var timeFormat = 'MM/DD/YYYY HH:mm';
+        var ctx = document.getElementById('myChart').getContext('2d');
+
+        var myChart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: time,
+                datasets: [{
+                    label: "Dependence of price on time",
+                    data: price,
+                    fill: false,
+                    borderColor: "rgb(75, 192, 192)",
+                    //spanGaps: true,
+                    lineTension: 0.1
+                }]
+            },
+            options: {
+                title: {
+                    text: 'Chart.js Time Scale'
+                },
+                scales: {
+                    xAxes: [{
+                        type: "time",
+                        time: {
+                            unit: 'hour',
+                            unitStepSize: 6.0,
+                            round: 'hour',
+                            tooltipFormat: "h:mm:ss a",
+                            displayFormats: {
+                                hour: 'MMM D, h:mm A'
+                            }
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Time",
+                            fontColor: "blue"
+                        }
+                    }],
+                    yAxes: [{
+                        gridLines: {
+                            color: "black",
+                            borderDash: [2, 5],
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Price",
+                            fontColor: "green"
+                        }
+                    }]
+                }
+            }
+        })
+    }
+
+    function tableGeneration(model) {
+        var ctx = document.getElementById('myTable');
+        var str = '';
+        model.map(elem => {
+            str += `<tr>
+                        <td><p>${elem.Id}</p></td>
+                        <td><p>${elem.Instrument.NameСurrency}</p></td>
+                        <td><p>${elem.Price}</p></td>
+                        <td><p>${elem.Volume}</p></td>
+                        <td><p>${elem.ParticipantBuy.Name}</p></td>
+                        <td><p>${elem.ParticipantSell.Name}</p></td>
+                        <td><p>${elem.TimeTransactions}</p></td>
+                   </tr>`
+        });
+        ctx.innerHTML = str;
+    }
+</script>

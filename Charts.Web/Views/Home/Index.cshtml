@@ -2,37 +2,54 @@
 
 @{
     ViewBag.Title = "Index";
-    var t = Model;
+    var transactions = Model;
 }
 
 <h2>Index</h2>
 <canvas id="myChart" width="400" height="400"></canvas>
 
-@*<table>
-        @foreach (var b in t)
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Currency</th>
+            <th>Price</th>
+            <th>Volume</th>
+            <th>ParticipantBuyId</th>
+            <th>ParticipantSellId</th>
+            <th>Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var elem in transactions)
         {
-            <tr>
-                <td><p>@b.Id</p></td>
-                <td><p>@b.Price</p></td>
-                <td><p>@b.TimeTransactions</p></td>
-            </tr>
+        <tr>
+            <td><p>@elem.Id</p></td>
+            <td><p>@elem.Instrument.NameСurrency</p></td>
+            <td><p>@elem.Price</p></td>
+            <td><p>@elem.Volume</p></td>
+            <td><p>@elem.ParticipantBuy.Name</p></td>
+            <td><p>@elem.ParticipantSell.Name</p></td>
+            <td><p>@elem.TimeTransactions</p></td>
+        </tr>
         }
-    </table>*@
+    </tbody>
+</table>
+
 <script>
     var model = @Html.Raw(Json.Encode(Model));
     var price = model.map(elem => elem.Price);
     var time = model.map(elem => Number(elem.TimeTransactions.replace(/\D/g, '')));
-    console.log('price', price);
-    console.log('time', time);
-    
+
     var timeFormat = 'MM/DD/YYYY HH:mm';
     var ctx = document.getElementById('myChart').getContext('2d');
+
     var myChart = new Chart(ctx, {
         type: "line",
         data: {
             labels: time,
             datasets: [{
-                label: "My First Dataset",
+                label: "Dependence of price on time",
                 data: price,
                 fill: false,
                 borderColor: "rgb(75, 192, 192)",
@@ -47,20 +64,31 @@
                 },
                 scales: {
                     xAxes: [{
-                        type: 'time',  
+                        type: "time",
                         time: {
-                            format: 'HH:mm',
-                            tooltipFormat: 'HH:mm',
+                            unit: 'hour',
+                            unitStepSize: 6.0,
+                            round: 'hour',
+                            tooltipFormat: "h:mm:ss a",
+                            displayFormats: {
+                                hour: 'MMM D, h:mm A'
+                            }
                         },
                         scaleLabel: {
                             display: true,
-                            labelString: 'Date'
+                            labelString: "Time",
+                            fontColor: "blue"
                         }
                     }],
                     yAxes: [{
+                        gridLines: {
+                            color: "black",
+                            borderDash: [2, 5],
+                        },
                         scaleLabel: {
                             display: true,
-                            labelString: 'Price'
+                            labelString: "Price",
+                            fontColor: "green"
                         }
                     }]
                 }

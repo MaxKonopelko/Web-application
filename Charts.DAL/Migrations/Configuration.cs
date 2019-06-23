@@ -14,103 +14,114 @@ namespace Charts.DAL.Migrations
         }
 
         protected override void Seed(Charts.DAL.ChartsContext context)
-        {        
-            if (!context.Instruments.Any() && !context.Participants.Any() && !context.Transactions.Any())
-            {
-                CreateInstrument(context);
-                CreateParticipant(context);
-                CreateTransaction(context);
-            }
+        {
+            CreateInstrument(context);
+            CreateParticipant(context);
+            CreateTransaction(context);         
             context.SaveChanges();
         }
 
         private static void CreateInstrument(ChartsContext context)
         {
-            context.Instruments.AddRange(new List<Instrument>
+            if (!context.Instruments.Any())
             {
-                new Instrument
+                context.Instruments.AddRange(new List<Instrument>
                 {
-                    Name—urrency = "Dollar"
-                },
-                new Instrument
-                {
-                   Name—urrency = "Evro"
-                },
-                new Instrument
-                {
-                    Name—urrency = "Uan"
-                },
-                new Instrument
-                {
-                    Name—urrency = "Grivna"
-                }
-            });
-            context.SaveChanges();
+                    new Instrument
+                    {
+                        Name—urrency = "USD"
+                    },
+                    new Instrument
+                    {
+                       Name—urrency = "EUR"
+                    },
+                    new Instrument
+                    {
+                        Name—urrency = "RUB"
+                    },
+                    new Instrument
+                    {
+                        Name—urrency = "CNY"
+                    }
+                });
+            }
         }
 
         private static void CreateParticipant(ChartsContext context)
         {
-            context.Participants.AddRange(new List<Participant>
+            if (!context.Participants.Any())
             {
-                new Participant
+                context.Participants.AddRange(new List<Participant>
                 {
-                    Name = "Max"
-                },
-                new Participant
-                {
-                   Name = "Tom"
-                },
-                new Participant
-                {
-                    Name = "Vasia"
-                }
-            });
-            context.SaveChanges();
+                    new Participant
+                    {
+                        Name = "Max"
+                    },
+                    new Participant
+                    {
+                        Name = "Tom"
+                    },
+                    new Participant
+                    {
+                        Name = "Vladimir"
+                    }
+                });
+            }
         }
 
         private static void CreateTransaction(ChartsContext context)
         {
-            context.Transactions.AddRange(new List<Transaction>
-            {
-                new Transaction
+            if (!context.Transactions.Any()) {
+                context.Transactions.AddRange(new List<Transaction>
                 {
-                    Price = 2,
-                    Volume = 34,
-                    InstrumentId = 1,
-                    TimeTransactions = new DateTime(2019,12,25,15,33,45),
-                    ParticipantBuyId = 1,
-                    ParticipantSellId = 2
-                },
-                new Transaction
-                {
-                    Price = 123,
-                    Volume = 55,
-                    InstrumentId = 2,
-                    TimeTransactions = new DateTime(2019,12,27,12,13,45),
-                    ParticipantBuyId = 2,
-                    ParticipantSellId =3
+                    new Transaction
+                    {
+                        Price = 23,
+                        Volume = 34,
+                        InstrumentId = 1,
+                        TimeTransactions = new DateTime(2019,12,25,15,33,45),
+                        ParticipantBuyId = 1,
+                        ParticipantSellId = 2
+                    },
+                    new Transaction
+                    {
+                        Price = 123,
+                        Volume = 55,
+                        InstrumentId = 2,
+                        TimeTransactions = new DateTime(2019,12,27,12,13,15),
+                        ParticipantBuyId = 2,
+                        ParticipantSellId =3
 
-                },
-                new Transaction
-                {
-                    Price = 3334,
-                    Volume = 3,
-                    InstrumentId = 3,
-                    TimeTransactions = new DateTime(2019,12,29,16,36,45),
-                    ParticipantBuyId = 1,
-                    ParticipantSellId =3
-                },
-                new Transaction
-                {
-                    Price = 3334,
-                    Volume = 3,
-                    InstrumentId = 3,
-                    TimeTransactions = new DateTime(2019,11,2,16,36,45),
-                    ParticipantBuyId = 1,
-                    ParticipantSellId =3
-                }
-            });
-            context.SaveChanges();
+                    },
+                    new Transaction
+                    {
+                        Price = 46,
+                        Volume = 20,
+                        InstrumentId = 2,
+                        TimeTransactions = new DateTime(2019,12,29,16,36,55),
+                        ParticipantBuyId = 1,
+                        ParticipantSellId =3
+                    },
+                    new Transaction
+                    {
+                        Price = 78,
+                        Volume = 33,
+                        InstrumentId = 3,
+                        TimeTransactions = new DateTime(2019,12,31,12,26,45),
+                        ParticipantBuyId = 1,
+                        ParticipantSellId =3
+                    },
+                    new Transaction
+                    {
+                        Price = 59,
+                        Volume = 5,
+                        InstrumentId = 3,
+                        TimeTransactions = new DateTime(2020,1,5,13,26,45),
+                        ParticipantBuyId = 2,
+                        ParticipantSellId =3
+                    }
+                });
+            }
         }
     }
 }

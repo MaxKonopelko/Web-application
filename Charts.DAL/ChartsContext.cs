@@ -60,14 +60,14 @@ namespace Charts.DAL
 
         [ForeignKey(nameof(Instrument))]
         public int InstrumentId { get; set; }
-        public Instrument Instrument { get; set; }
+        public virtual Instrument Instrument { get; set; }
 
         [ForeignKey(nameof(ParticipantBuy))]
         public int ParticipantBuyId { get; set; }
-        public Participant ParticipantBuy { get; set; }
+        public virtual Participant ParticipantBuy { get; set; }
 
         [ForeignKey(nameof(ParticipantSell))]
         public int ParticipantSellId { get; set; }
-        public Participant ParticipantSell { get; set; }
+        public virtual Participant ParticipantSell { get; set; }
     }
 }
